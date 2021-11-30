@@ -1,0 +1,13 @@
+global_costmap:
+  global_frame: /map
+  robot_base_frame: /tb3_hsc/base_footprint
+
+  # 갱신 주기
+  update_frequency: 10.0
+  publish_frequency: 10.0
+  
+  # @@ 변환 허용 시간 (Remote PC와 Host PC의 time sync가 설정한 값보다 많이 차이나면 경고메세지를 보내겠다는 것임)
+  transform_tolerance: 0.5  # default: 0.5
+
+  static_map: true
+ 

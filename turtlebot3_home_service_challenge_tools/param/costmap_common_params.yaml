@@ -1,0 +1,22 @@
+obstacle_range: 0.1 # 장애물 인식거리 default: 2.5 // opt: 0.8
+raytrace_range: 3.5 # 이 거리 이상의 데이터는 자유공간 처리
+
+# 로봇 외형의 치수
+footprint: [[-0.205, -0.155], [-0.205, 0.155], [0.077, 0.155], [0.077, -0.155]]
+#robot_radius: 0.17
+
+#inflation_radius: 1.0
+#cost_scaling_factor: 3.0
+
+# 인플레이션 영역의 반지름으로 장애물에 접근하지 못하게 하는 영역이다. (장애물 주위로 생기는 영역)
+inflation_radius: 0.18 # default: 0.5  // opt:0.2
+cost_scaling_factor: 0.15  # cost계산시 활용되는 계수 // 원래 10.0 // opt: 0.5
+
+# 사용할 costmap을 voxel와 costmap중 하나로 선택한다
+map_type: costmap
+
+# 사용하는 센서 지정
+observation_sources: scan
+
+# 레이저 스캔의 데이터형, 토픽, 코스트맵에 반영, 최소 장애물 높이 설정
+scan: {sensor_frame: /tb3_hsc/base_scan, data_type: LaserScan, topic: /tb3_hsc/scan, marking: true, clearing: true}

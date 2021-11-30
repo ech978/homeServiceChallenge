@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="address" default="192.168.1.13"/>
+
+  <arg name="env_name" default="env.bash"/>
+  <arg name="user_name" default="nvidia"/>
+  <arg name="password" default="nvidia"/>
+  
+  <arg name="use_robot_name" default="tb3_hsc"/>
+  
+  <arg name="set_lidar_frame_id" default="base_scan"/>
+  <arg name="use_filter" default="true"/>
+
+
+
+
+
+  <arg name="camera_id" default="0" />                       <!-- The sensor id of the camera -->
+  <arg name="camera_name" default="csi_cam_$(arg camera_id)" /> <!-- The name of the camera (corrsponding to the camera info) -->
+ 
+  <arg name="camera_frame_id" default="$(arg use_robot_name)/camera_rgb_optical_frame" />    <!-- The TF frame ID. -->
+ 
+  <arg name="sync_sink" default="true" />                    <!-- Synchronize the app sink. Setting this to false may resolve problems with sub-par framerates. -->
+  <arg name="width" default="640" />                         <!-- Image Width -->
+  <arg name="height" default="480" />                        <!-- Image Height -->
+  <arg name="fps" default="10" />                            <!-- Desired framerate. True framerate may not reach this if set too high. -->
+
+
+
+
+
+
+  <!-- setting for machine -->
+  <machine name="tb3" address="$(arg address)" env-loader="~/$(arg env_name)" user="$(arg user_name)" password="$(arg password)" />
+
+  <group ns="$(arg use_robot_name)">
+    <param name="robot_description"
+      command="$(find xacro)/xacro --inorder '$(find turtlebot3_manipulation_description)/urdf/turtlebot3_manipulation_robot.urdf.xacro'"/>
+
+    <!-- packages for turtlebot3 -->
+    <node machine="tb3" pkg="rosserial_python" type="serial_node.py" name="turtlebot3_core" output="screen">
+      <param name="port" value="/dev/ttyACM0"/>
+      <param name="baud" value="115200"/>
+      <param name="tf_prefix" value="$(arg use_robot_name)"/>
+    </node>
+ 
+    <!-- lidar -->
+    <node machine="tb3" pkg="hls_lfcd_lds_driver" type="hlds_laser_publisher" name="turtlebot3_lds" output="screen">
+      <param name="port" value="/dev/ttyUSB0" />
+      <param name="frame_id" value="$(arg use_robot_name)/$(arg set_lidar_frame_id)"/>
+      <remap if="$(arg use_filter)" from="scan" to="scan_raw"/>
+    </node>
+    
+    <!-- laserscan filter 4/2-->
+    <group if="$(arg use_filter)">
+      <node name="laser_scan_filter_node" pkg="turtlebot3_home_service_challenge_tools" type="laser_scan_filter_node" respawn="false" output="screen">
+        <param name="input_topic" value="/$(arg use_robot_name)/scan_raw"/>
+        <param name="output_topic" value="/$(arg use_robot_name)/scan"/>
+        <param name="mean_k" value="1"/>
+        <param name="std_dev_mul" value="1"/>
+      </node>  
+    </group>
+
+    <node machine="tb3" pkg="turtlebot3_bringup" type="turtlebot3_diagnostics" name="turtlebot3_diagnostics" output="screen"/>
+    
+    <!-- tf -->
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+       <param name="publish_frequency" type="double" value="100.0" />
+       <param name="tf_prefix" value="$(arg use_robot_name)" />
+    </node>
+
+    
+    
+
+
+    <!-- Make arguments available to parameter server -->
+    <param name="$(arg camera_name)/camera_id" type="int" value="$(arg camera_id)" />
+    <param name="$(arg camera_name)/image_width" type="int" value="$(arg width)" />
+    <param name="$(arg camera_name)/image_height" type="int" value="$(arg height)" />
+    <param name="$(arg camera_name)/target_fps" type="int" value="$(arg fps)" />
+    
+    <!-- csi camera -->
+    <env name="GSCAM_CONFIG" value="nvcamerasrc sensor-id=$(arg camera_id) ! video/x-raw(memory:NVMM),
+    width=(int)$(arg width), height=(int)$(arg height), format=(string)I420, framerate=(fraction)$(arg fps)/1 ! 
+    nvvidconv flip-method=-1 ! video/x-raw, format=(string)BGRx ! videoconvert ! video/x-raw, format=(string)BGR" />
+    
+    <!-- Start the GSCAM node -->
+    <node machine="tb3" pkg="gscam" type="gscam" name="$(arg camera_name)">
+      <param name="camera_name" value="$(arg camera_name)" />
+      <param name="frame_id" value="$(arg camera_frame_id)" />
+      <param name="sync_sink" value="$(arg sync_sink)" />
+      <remap from="camera/image_raw" to="$(arg camera_name)/image_raw" />
+      <remap from="/set_camera_info" to="$(arg camera_name)/camera_info" />
+    </node>
+  </group>
+
+</launch>

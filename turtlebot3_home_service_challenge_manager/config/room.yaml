@@ -1,0 +1,56 @@
+# room_0 :
+#   name : living_room
+#   object :
+#     marker : ar_marker_0
+#     position : [0.25, 0, 0.15]
+#   target :
+#     marker : ar_marker_4
+#     position : [0.25, 0, 0.15]
+#   x : [-0.5, 0.5]  # max, min
+#   y : [0, 0.5]  # max, min
+
+
+room_1 :
+  name : bath_room
+  object :
+    marker : ar_marker_0
+    position : [0.25, 0, 0.13]
+  target :
+    marker : ar_marker_4
+    position : [0.26, 0, 0.131] # 내려놓을때는 좀더 많이 뻗고 덜 내려갈 필요가 있음
+  x : [1.5, 0.3]  # max, min -1, 0.5
+  y : [1.5, 0.3]  # max, min  0, 0.5
+  
+room_2 :
+  name : chanhyun_room
+  object :
+    marker : ar_marker_1
+    position : [0.25, 0, 0.13]
+  target :
+    marker : ar_marker_5
+    position : [0.26, 0, 0.131]
+  x : [-1.5, -0.5]
+  y : [1.5, 0.3]
+    
+room_3 :
+  name : kitchen
+  object :
+    marker : ar_marker_2
+    position : [0.25, 0, 0.13]
+  target :
+    marker : ar_marker_6
+    position : [0.26, 0, 0.131]
+  x : [-1.5, -0.3]
+  y : [-1.5, -0.3]
+  
+room_4 :
+  name : hanbi_room
+  object :
+    marker : ar_marker_3
+    position : [0.25, 0, 0.13]
+  target :
+    marker : ar_marker_7
+    position : [0.26, 0, 0.131]
+  x : [1.5, 0.3]
+  y : [-1.5, -0.3]
+  

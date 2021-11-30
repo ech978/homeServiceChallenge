@@ -1,0 +1,16 @@
+local_costmap:
+  global_frame: /tb3_hsc/odom
+  robot_base_frame: /tb3_hsc/base_footprint
+
+  update_frequency: 10.0 # 갱신주기 default: 10 // opt: 0.1  // 5 -> 2 변경상태
+  publish_frequency: 10.0 # 방송 주기 default: 10  // opt: 0.1
+  transform_tolerance: 0.5  # 변환 허용시간 default: 0.5
+
+
+  # @@@@ 주어진 지도를 사용하는가 설정
+  static_map: false  
+  rolling_window: true #국부 지도창 설정
+  width: 1  #국부 지도창의 넓이
+  height: 1 #국부 지도창의 높이
+  resolution: 0.025 #0.05
+  

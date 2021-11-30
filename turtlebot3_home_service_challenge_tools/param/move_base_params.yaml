@@ -1,0 +1,30 @@
+# 이동속도 명령을 로봇에게 전달
+
+# movebase가 비활성화 되어있으면 costmap노드 종료
+shutdown_costmaps: false  # default: false
+
+# 로봇 베이스에 속도 명령을 주는 컨트롤 반복의 주기
+controller_frequency: 15.0  # default: 10 @@ 높을수록 좋음
+
+# Space-clearning 동작이 수행되기 전 사용가능한 계획들을 찾는데 기다리는 최대 시간
+planner_patience: 60.0  # default: 10   @@ 높을수록 좋음
+
+# Space-clearing 동작이 수행되기 전에 컨트롤러가 컨트롤 정보를 수신대기할 최대시간
+controller_patience: 60.0 # 높을 수록 좋음
+
+
+# 전역 계획의 반복 주기 (Hz)
+planner_frequency: 10.0 # default 5.0 # 높을수록 좋음
+
+
+# move_base에서 충돌되었다고 생각할때 복구동작(한바퀴 돌기)을 진행함
+# 이때 복구동작(recovery behavior)을 실행하기 전 로봇이 왔다갔다 하는 것을 허용하는 시간\
+# @@@ idea: 애초에 local costmap을 꺼놨으니, stuck을 걱정하여 oscillation을 하는것은 불필요하지않을까? 그냥 꺼버리는게 어떨까
+oscillation_timeout: 10.0 # default: 10.0  낮을 수록 좋음 // opt: 0.1
+
+# 로봇이 왔다갔다 하지 않도록 움직여야만 하는 거리 (meter)
+# 움직이고나면 timeout 초기화
+oscillation_distance: 0.03  # default: 0.2  // optim 0.01
+
+# 복구 동작의 costmap 초기화 때 이 정해진 거리보다 먼 장애물은 지도에서 삭제된다.
+conservative_reset_dist: 0.5
