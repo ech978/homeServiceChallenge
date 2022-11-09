@@ -1,4 +1,4 @@
-image: /home/kusw-004/tb3_hsc.pgm
+image: /home/(whoami)/tb3_hsc.pgm
 resolution: 0.010000
 origin: [-10.000000, -10.000000, 0.000000]
 negate: 0
